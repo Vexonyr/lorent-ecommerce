@@ -1,0 +1,40 @@
+{
+  "name": "lorent-ecommerce",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "postinstall": "prisma generate",
+    "db:seed": "tsx prisma/seed.ts",
+    "admin:create": "tsx prisma/create-admin.ts"
+  },
+  "dependencies": {
+    "next": "16.3.8",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.6.1",
+    "jose": "^6.1.0",
+    "mercadopago": "^2.8.0",
+    "pg": "^8.16.3",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@types/node": "^22.19.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/pg": "^8.15.5",
+    "eslint": "^9.39.0",
+    "eslint-config-next": "16.3.8",
+    "tailwindcss": "^4.3.0",
+    "@tailwindcss/postcss": "^4.3.0",
+    "prisma": "^7.3.0",
+    "tsx": "^4.20.6"
+  }
+}
