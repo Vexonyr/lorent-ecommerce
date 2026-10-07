@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 190" role="img" aria-label="Símbolo Lorent">
+  <g fill="#111111" stroke="#111111" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="260" cy="36" rx="57" ry="17" fill="none" stroke-width="13"/>
+    <path d="M240 76 C196 72 148 58 72 17 C112 63 162 87 218 99 C229 101 238 93 240 76 Z" stroke="none"/>
+    <path d="M226 101 C173 93 123 75 45 34 C84 79 142 108 205 119 C217 121 225 113 226 101 Z" stroke="none"/>
+    <path d="M208 121 C158 115 112 99 64 68 C94 105 139 130 190 137 C201 139 207 132 208 121 Z" stroke="none"/>
+    <path d="M193 140 C152 137 117 126 84 106 C109 133 143 148 177 153 C186 154 193 149 193 140 Z" stroke="none"/>
+    <path d="M237 77 C217 80 203 92 194 110 L222 158 C229 170 243 174 247 158 L250 96 C250 85 247 79 237 77 Z" stroke="none"/>
+    <g transform="translate(520 0) scale(-1 1)">
+      <path d="M240 76 C196 72 148 58 72 17 C112 63 162 87 218 99 C229 101 238 93 240 76 Z" stroke="none"/>
+      <path d="M226 101 C173 93 123 75 45 34 C84 79 142 108 205 119 C217 121 225 113 226 101 Z" stroke="none"/>
+      <path d="M208 121 C158 115 112 99 64 68 C94 105 139 130 190 137 C201 139 207 132 208 121 Z" stroke="none"/>
+      <path d="M193 140 C152 137 117 126 84 106 C109 133 143 148 177 153 C186 154 193 149 193 140 Z" stroke="none"/>
+      <path d="M237 77 C217 80 203 92 194 110 L222 158 C229 170 243 174 247 158 L250 96 C250 85 247 79 237 77 Z" stroke="none"/>
+    </g>
+  </g>
+</svg>
