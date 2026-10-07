@@ -1,13 +1,15 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
+import { AddToCart } from '@/components/add-to-cart';
+import { CustomerMenu } from '@/components/customer-menu';
 
 export const dynamic = 'force-dynamic';
 const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = await prisma.product.findFirst({ where: { id: slug, active: true } });
+  const product = await prisma.product.findFirst({ where: { id: slug, active: true }, include: { stock: true } });
 
   if (!product) notFound();
 
@@ -17,7 +19,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <img className="brand-mark" src="/brand/lorent-mark.svg" alt=""/>
         <span className="brand-name">LORENT<small>®</small></span>
       </Link>
-      <nav aria-label="Navegação do produto"><Link href="/#colecao">Coleção</Link></nav>
+      <nav aria-label="Navegação do produto"><Link href="/#colecao">Coleção</Link><CustomerMenu /></nav>
       <Link className="detail-back" href="/#colecao">← Voltar</Link>
     </header>
 
@@ -43,9 +45,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </p>
 
         <div className="detail-divider"/>
-        <p className="detail-description">Uma peça da coleção Lorent apresentada com foco nos detalhes, proporções e acabamento do modelo.</p>
+        <p className="detail-description">{product.description || 'Uma peça da coleção Lorent apresentada com foco nos detalhes, proporções e acabamento do modelo.'}</p>
+        <AddToCart productId={product.id} name={product.name} stock={product.stock?.quantity ?? null} detail />
 
-        <a className="button primary-button detail-cta" href="/#colecao">Ver coleção completa <span>→</span></a>
+        <Link className="button primary-button detail-cta" href="/#colecao">Ver coleção completa <span>→</span></Link>
 
         <div className="detail-service">
           <div><strong>Atendimento</strong><span>Suporte personalizado para sua escolha.</span></div>

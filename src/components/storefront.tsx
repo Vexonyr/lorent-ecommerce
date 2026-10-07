@@ -3,59 +3,36 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import type { CatalogProduct } from '@/lib/products';
+import { CustomerMenu } from '@/components/customer-menu';
+import { useCart } from '@/components/cart-provider';
+import { CartPanel } from '@/components/cart-panel';
+import { AddToCart } from '@/components/add-to-cart';
+import { searchProducts } from '@/lib/cart';
 
 const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 
 type SortMode = 'featured' | 'price-asc' | 'price-desc';
 
-export function Storefront({ stage, catalogProducts }: { stage: number; catalogProducts: CatalogProduct[] }) {
+export function Storefront({ catalogProducts }: { catalogProducts: CatalogProduct[] }) {
   const [query, setQuery] = useState('');
   const [sortMode, setSortMode] = useState<SortMode>('featured');
-  const [cart, setCart] = useState<Record<string, number>>({});
-  const [notice, setNotice] = useState('');
+  const { items } = useCart();
 
   const visible = useMemo(() => {
-    const filtered = catalogProducts.filter(product =>
-      product.name.toLowerCase().includes(query.toLowerCase()),
-    );
+    const filtered = searchProducts(catalogProducts, query);
 
     if (sortMode === 'featured') return filtered;
 
     return [...filtered].sort((a, b) => {
-      const aPrice = a.priceInCents ?? Number.MAX_SAFE_INTEGER;
-      const bPrice = b.priceInCents ?? Number.MAX_SAFE_INTEGER;
-      return sortMode === 'price-asc' ? aPrice - bPrice : bPrice - aPrice;
+      if (a.priceInCents === null) return b.priceInCents === null ? 0 : 1;
+      if (b.priceInCents === null) return -1;
+      return sortMode === 'price-asc' ? a.priceInCents - b.priceInCents : b.priceInCents - a.priceInCents;
     });
   }, [catalogProducts, query, sortMode]);
 
-  const count = Object.values(cart).reduce((sum, quantity) => sum + quantity, 0);
-  const subtotal = catalogProducts.reduce((sum, product) => {
-    const quantity = cart[product.id] || 0;
-    return sum + (product.priceInCents ?? 0) * quantity;
-  }, 0);
+  const count = items.reduce((sum, item) => sum + item.quantity, 0);
 
   const heroProduct = catalogProducts.find(product => product.imageUrl) ?? catalogProducts[0];
-
-  async function checkout(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const fields = new FormData(event.currentTarget);
-    setNotice('Conectando ao checkout seguro…');
-
-    const response = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        customerName: fields.get('name'),
-        customerEmail: fields.get('email'),
-        customerPhone: fields.get('phone') || undefined,
-        items: Object.entries(cart).map(([productId, quantity]) => ({ productId, quantity })),
-      }),
-    });
-
-    const result = await response.json();
-    if (response.ok && result.checkoutUrl) window.location.assign(result.checkoutUrl);
-    else setNotice(result.error || 'Não foi possível iniciar o checkout.');
-  }
 
   return <>
     <div className="announcement-bar">LORENT · COMPRA ONLINE · ATENDIMENTO PERSONALIZADO</div>
@@ -73,6 +50,7 @@ export function Storefront({ stage, catalogProducts }: { stage: number; catalogP
       </nav>
 
       <div className="header-actions">
+        <CustomerMenu />
         <a href="#colecao">Buscar</a>
         <a className="bag-link" href="#pedido">Sacola <b>{count}</b></a>
       </div>
@@ -111,7 +89,7 @@ export function Storefront({ stage, catalogProducts }: { stage: number; catalogP
             <p className="eyebrow">LOJA</p>
             <h2>Todos os relógios</h2>
           </div>
-          <span>{visible.length} produtos</span>
+          <span role="status" aria-live="polite">{visible.length} produtos</span>
         </div>
 
         <div className="shop-toolbar">
@@ -120,7 +98,9 @@ export function Storefront({ stage, catalogProducts }: { stage: number; catalogP
             <input
               value={query}
               onChange={event => setQuery(event.target.value)}
-              placeholder="Buscar por modelo"
+              placeholder="Modelo, descrição ou referência"
+              type="search"
+              maxLength={120}
             />
           </label>
 
@@ -156,23 +136,14 @@ export function Storefront({ stage, catalogProducts }: { stage: number; catalogP
 
                 <div className="shop-product-actions">
                   <Link href={'/produto/' + product.id} className="details-link">Ver detalhes</Link>
-                  <button
-                    className="add-to-bag"
-                    disabled={product.priceInCents === null}
-                    onClick={() => {
-                      setCart(current => ({ ...current, [product.id]: (current[product.id] || 0) + 1 }));
-                      setNotice(product.name + ' adicionado à sacola.');
-                    }}
-                  >
-                    Adicionar à sacola
-                  </button>
+                  <AddToCart productId={product.id} name={product.name} stock={product.stock?.quantity ?? null} />
                 </div>
               </div>
             </article>
           ))}
         </div>
 
-        {visible.length === 0 && <div className="empty-state">Nenhum produto encontrado.</div>}
+        {visible.length === 0 && <div className="empty-state"><p>Nenhum produto encontrado para “{query}”.</p><button type="button" className="shop-text-link" onClick={() => setQuery('')}>Limpar busca</button></div>}
       </section>
 
       <section id="sobre" className="shop-about">
@@ -190,51 +161,7 @@ export function Storefront({ stage, catalogProducts }: { stage: number; catalogP
           <p>Revise os itens antes de continuar para o checkout.</p>
         </div>
 
-        <div className="cart-panel">
-          {count === 0 ? (
-            <div className="empty-cart">
-              <strong>Sua sacola está vazia.</strong>
-              <p>Adicione um relógio para começar seu pedido.</p>
-              <a className="shop-button shop-button-dark" href="#colecao">Ver produtos</a>
-            </div>
-          ) : (
-            <>
-              <div className="cart-items">
-                {catalogProducts.filter(product => cart[product.id]).map(product => (
-                  <div className="cart-line" key={product.id}>
-                    <div className="cart-line-copy">
-                      <strong>{product.name}</strong>
-                      <span>Quantidade: {cart[product.id]}</span>
-                    </div>
-                    <strong className="cart-line-price">
-                      {product.priceInCents === null ? '' : money.format(product.priceInCents * cart[product.id] / 100)}
-                    </strong>
-                    <button onClick={() => setCart(current => {
-                      const next = { ...current };
-                      delete next[product.id];
-                      return next;
-                    })}>Remover</button>
-                  </div>
-                ))}
-              </div>
-
-              <div className="cart-summary">
-                <div><span>Itens</span><strong>{count}</strong></div>
-                <div className="cart-total"><span>Subtotal</span><strong>{money.format(subtotal / 100)}</strong></div>
-              </div>
-
-              <form className="checkout-form" onSubmit={checkout}>
-                <h3>Dados para continuar</h3>
-                <label>Nome completo<input required name="name" placeholder="Seu nome"/></label>
-                <label>E-mail<input required name="email" type="email" placeholder="voce@email.com"/></label>
-                <label>Telefone (opcional)<input name="phone" placeholder="(00) 00000-0000"/></label>
-                <button className="shop-button shop-button-dark checkout-button" type="submit">Continuar para pagamento</button>
-              </form>
-            </>
-          )}
-
-          {notice && <p className="notice" role="status">{notice}</p>}
-        </div>
+        <CartPanel products={catalogProducts} />
       </section>
     </main>
 
