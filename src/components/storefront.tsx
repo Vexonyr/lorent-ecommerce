@@ -61,7 +61,10 @@ export function Storefront({ stage, catalogProducts }: { stage: number; catalogP
     <div className="announcement-bar">LORENT · COMPRA ONLINE · ATENDIMENTO PERSONALIZADO</div>
 
     <header className="store-header">
-      <Link className="wordmark" href="/">LORENT<span>®</span></Link>
+      <Link className="brand-lockup" href="/" aria-label="Lorent - início">
+        <img className="brand-mark" src="/brand/lorent-mark.svg" alt=""/>
+        <span className="brand-name">LORENT<small>®</small></span>
+      </Link>
 
       <nav aria-label="Navegação principal">
         <a href="#colecao">Relógios</a>
