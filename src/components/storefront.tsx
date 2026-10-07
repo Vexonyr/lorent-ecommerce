@@ -59,9 +59,11 @@ export function Storefront({ stage, catalogProducts }: { stage: number; catalogP
         </div>
 
         <div className="hero-product" aria-label="Destaque da coleção Lorent">
-          {heroProduct?.imageUrl
-            ? <img src={heroProduct.imageUrl} alt={heroProduct.name}/>
-            : <div className="hero-fallback"><span>LORENT</span><strong>01</strong><small>COLEÇÃO</small></div>}
+          <img
+            src={heroProduct?.imageUrl || '/catalogo/placeholder-white.svg'}
+            alt={heroProduct?.imageUrl ? heroProduct.name : ''}
+            aria-hidden={!heroProduct?.imageUrl}
+          />
           <div className="hero-product-meta">
             <span>COLEÇÃO LORENT</span>
             <span>{catalogProducts.length.toString().padStart(2, '0')} MODELOS</span>
@@ -98,9 +100,12 @@ export function Storefront({ stage, catalogProducts }: { stage: number; catalogP
           {visible.map(product => (
             <article className="product-card" key={product.id}>
               <Link href={'/produto/' + product.id} className="product-media" aria-label={'Abrir ' + product.name}>
-                {product.imageUrl
-                  ? <img className="product-photo" src={product.imageUrl} alt={product.name}/>
-                  : <div className="product-fallback"><span>LORENT</span><strong>{product.name.slice(-2)}</strong></div>}
+                <img
+                  className="product-photo"
+                  src={product.imageUrl || '/catalogo/placeholder-white.svg'}
+                  alt={product.imageUrl ? product.name : ''}
+                  aria-hidden={!product.imageUrl}
+                />
                 <span className="product-view">Ver produto</span>
               </Link>
               <div className="product-info">
