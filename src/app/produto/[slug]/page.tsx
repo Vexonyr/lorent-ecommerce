@@ -13,7 +13,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return <main className="detail-page">
     <header className="topbar">
-      <Link className="wordmark" href="/">LORENT<span>®</span></Link>
+      <Link className="brand-lockup" href="/" aria-label="Lorent - início">
+        <img className="brand-mark" src="/brand/lorent-mark.svg" alt=""/>
+        <span className="brand-name">LORENT<small>®</small></span>
+      </Link>
       <nav aria-label="Navegação do produto"><Link href="/#colecao">Coleção</Link></nav>
       <Link className="detail-back" href="/#colecao">← Voltar</Link>
     </header>
