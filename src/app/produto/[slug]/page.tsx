@@ -21,9 +21,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     <section className="detail-layout">
       <div className="detail-gallery">
         <div className="detail-main-image" aria-label={'Foto de ' + product.name}>
-          {product.imageUrl
-            ? <img className="product-photo" src={product.imageUrl} alt={product.name}/>
-            : <div className="detail-fallback"><span>LORENT</span><strong>{product.name.slice(-2)}</strong><small>MODELO</small></div>}
+          <img
+            className="product-photo"
+            src={product.imageUrl || '/catalogo/placeholder-white.svg'}
+            alt={product.imageUrl ? product.name : ''}
+            aria-hidden={!product.imageUrl}
+          />
         </div>
         <div className="detail-gallery-note"><span>LORENT</span><span>COLEÇÃO OFICIAL</span></div>
       </div>
