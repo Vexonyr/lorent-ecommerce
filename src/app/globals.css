@@ -49,3 +49,20 @@ body{background:linear-gradient(180deg,#f4f1e9 0%,var(--paper) 38%,#ece8de 100%)
 footer{background:#e7e3d9}
 @media(max-width:850px){.hero h1{font-size:clamp(52px,8vw,76px)}.product-grid{gap:36px 16px}}
 @media(max-width:620px){.topbar{position:sticky}.topbar nav a{padding:22px 0}.topbar nav a:after{bottom:15px}.hero{min-height:auto}.hero:before{top:68%;font-size:42vw}.hero h1{font-size:54px}.hero-visual{transform:none;box-shadow:0 18px 45px rgba(13,13,12,.2)}.product-grid{gap:30px 12px}.product-placeholder:after{display:none}.search{width:100%}.search input{width:100%;min-width:0}.order-box{margin-top:30px}.about:after{font-size:180px}}
+
+/* Lorent 02 — classic luxury direction */
+:root{--ink:#11110f;--paper:#f3f0e8;--muted:#777269;--line:#d6d0c3;--gold:#92743f;--black:#090a09}
+.topbar{height:84px;padding:0 6vw;border-bottom-color:rgba(146,116,63,.22)}
+.wordmark{font-size:23px;letter-spacing:.24em}
+.hero{grid-template-columns:1.05fr .95fr;padding:78px 10vw 84px;background:linear-gradient(115deg,#f1eee5 0%,#e7e1d4 62%,#d9d0c0 100%)}
+.hero-copy{max-width:720px}.hero .eyebrow{letter-spacing:.3em}.hero h1{font-size:clamp(62px,7.2vw,108px);line-height:.92;letter-spacing:-.055em}
+.hero h1 i{color:#806535}.intro{max-width:470px;font-size:14px;letter-spacing:.015em}
+.hero-visual{width:min(100%,410px);height:510px;padding:18px;background:linear-gradient(155deg,#191915,#070807);border:1px solid rgba(213,189,131,.22)}
+.hero-identity span{font-size:31px;letter-spacing:.28em}.hero-identity strong{letter-spacing:.38em}
+.catalog{padding-top:125px}.section-heading h2{font-size:60px}.product-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:58px 24px}
+.product-placeholder{height:340px;background:linear-gradient(150deg,#22211c,#0b0c0b)}.product-number{font-size:88px}.product-name{font-size:22px}
+.about{padding-top:135px;padding-bottom:135px}.about h2{font-size:70px;max-width:780px}.about>p:last-child{font-size:14px;max-width:520px}
+.order-section{padding-top:120px;padding-bottom:120px}.order-box{padding:38px}
+footer{min-height:110px}
+@media(max-width:1000px){.product-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:620px){.topbar{height:68px}.topbar nav a:nth-child(3){display:none}.hero{padding:62px 6vw 78px}.hero h1{font-size:56px}.hero-visual{height:410px}.catalog{padding-top:76px}.section-heading h2{font-size:44px}.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 12px}.product-placeholder{height:240px}.product-number{font-size:64px}.product-name{font-size:17px}.about{padding-top:82px;padding-bottom:82px}.about h2{font-size:48px}}
