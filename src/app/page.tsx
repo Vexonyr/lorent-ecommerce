@@ -6,8 +6,8 @@ export const dynamic = 'force-dynamic';
 export default async function Home() {
   const catalogProducts = await prisma.product.findMany({
     where: { active: true },
-    select: { id: true, name: true, imageUrl: true, priceInCents: true },
+    select: { id: true, name: true, imageUrl: true, priceInCents: true, description: true, stock: { select: { quantity: true } } },
     orderBy: { id: 'asc' },
   });
-  return <Storefront stage={4} catalogProducts={catalogProducts} />;
+  return <Storefront catalogProducts={catalogProducts} />;
 }
